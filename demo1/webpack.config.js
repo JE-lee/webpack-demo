@@ -1,9 +1,9 @@
 const path = require('path')
 const htmlWebpackPlugin = require('html-webpack-plugin')
 
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-//const devMode = process.env.NODE_ENV !== 'production'
-const devMode = false
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const webpack = require('webpack')
+const devMode = process.env.NODE_ENV !== 'production'
 
 function resolve(p){
   return path.resolve(__dirname, p)
@@ -11,13 +11,17 @@ function resolve(p){
 module.exports = {
   mode: 'development',
   entry:{
-    index: './index.js',
-    detail: './detail.js'
+    index: resolve('./index.js'),
+    detail: resolve('./detail.js')
   },
   output: {
     publicPath: './',
     path: resolve('./dist'),
     filename: '[name].js'
+  },
+  devServer: {
+    hot: true,
+    publicPath: '/asserts/'
   },
   module: {
     rules: [
@@ -47,17 +51,20 @@ module.exports = {
       title: 'index',
       chunks: ['index','vendor'] ,
       filename: 'index.html',
-      template: './template.html'
+      template: resolve('./template.html')
     }),
     new htmlWebpackPlugin({
       title: 'detail',
       chunks: ['detail', 'vendor'],
       filename: 'detail.html',
+      template: resolve('./template.html')
     }),
     new MiniCssExtractPlugin({
       filename: devMode ? '[name].css' : '[name].[hash].css',
       chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
-    })
+    }),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin()
   ],
   optimization: {
     splitChunks: {
