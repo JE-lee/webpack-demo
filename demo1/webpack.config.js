@@ -1,15 +1,16 @@
 const path = require('path')
 const htmlWebpackPlugin = require('html-webpack-plugin')
-
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const webpack = require('webpack')
-const devMode = process.env.NODE_ENV !== 'production'
+
+const devMode = false
 
 function resolve(p){
   return path.resolve(__dirname, p)
 }
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry:{
     index: resolve('./index.js'),
     detail: resolve('./detail.js')
@@ -47,6 +48,7 @@ module.exports = {
     ]
   },
   plugins: [
+    new OptimizeCSSAssetsPlugin({}),
     new htmlWebpackPlugin({ 
       title: 'index',
       chunks: ['index','vendor'] ,
@@ -70,7 +72,15 @@ module.exports = {
     splitChunks: {
       minSize: 10,
       chunks: 'all',
-      name: 'vendor'
+      name: 'vendor',
+      cacheGroups: {
+        styles: {
+          name: 'styles',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true 
+        }
+      }
     }
   }
 }
