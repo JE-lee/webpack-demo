@@ -1,4 +1,5 @@
 const path = require('path')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 function resolve(pt){
   return path.resolve(__dirname, pt)
 }
@@ -13,7 +14,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(e|j)s&/,
+        test: /\.(e|j)s$/,
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: "babel-loader",
@@ -22,4 +23,7 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new CleanWebpackPlugin()
+  ]
 }
