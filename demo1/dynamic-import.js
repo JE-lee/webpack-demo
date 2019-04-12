@@ -1,3 +1,3 @@
-export default function print(name){
-  console.log('show name')
+export default  function(){
+  return '123'
 }

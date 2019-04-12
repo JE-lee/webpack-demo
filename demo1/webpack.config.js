@@ -2,6 +2,7 @@ const path = require('path')
 const htmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 const webpack = require('webpack')
 
 const devMode = false
@@ -48,16 +49,20 @@ module.exports = {
     ]
   },
   plugins: [
+    new CleanWebpackPlugin(),
+    new webpack.DefinePlugin({
+      IS_MANAGER: JSON.stringify({ name: 'leeeeee'})
+    }),
     new OptimizeCSSAssetsPlugin({}),
     new htmlWebpackPlugin({ 
       title: 'index',
-      chunks: ['index','vendor'] ,
+      chunks: ['index'] ,
       filename: 'index.html',
       template: resolve('./template.html')
     }),
     new htmlWebpackPlugin({
       title: 'detail',
-      chunks: ['detail', 'vendor'],
+      chunks: ['detail'],
       filename: 'detail.html',
       template: resolve('./template.html')
     }),
@@ -70,7 +75,7 @@ module.exports = {
   ],
   optimization: {
     splitChunks: {
-      minSize: 10,
+      minSize: 1024,
       chunks: 'all',
       name: 'vendor',
       cacheGroups: {
