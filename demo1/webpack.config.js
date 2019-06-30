@@ -77,7 +77,7 @@ module.exports = {
     splitChunks: {
       minSize: 1024,
       chunks: 'all',
-      name: 'vendor',
+      name: true,
       cacheGroups: {
         styles: {
           name: 'styles',
